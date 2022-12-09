@@ -8,12 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.forage_compose.domain.Forage
 import com.example.forage_compose.domain.repo.ForageRepo
-import com.example.forage_compose.utils.Constants
-import com.example.forage_compose.utils.DetailsScreenEvents
-import com.example.forage_compose.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -57,10 +52,27 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
+//    private var deletedForage : Forage?= null
+
 //    fun onEvents(events: DetailsScreenEvents){
 //        when(events){
-//            is DetailsScreenEvents.OnForageEdit -> {
-//                sendUiEvents(UiEvent.Navigate(Constants.INPUT_SCREEN  + "?forageId=${events.forage.id}"))
+//            is DetailsScreenEvents.OnDeleteForage -> {
+//                viewModelScope.launch {
+//                    deletedForage = events.forage
+//                    repo.deleteForage(events.forage)
+//                    sendUiEvents(UiEvent.ShowSnackBar(
+//                        message = "${forage?.name } Deleted",
+//                        action = "Undo"
+//                    ))
+//                }
+//            }
+//
+//            is DetailsScreenEvents.OnUndoDeleteClick -> {
+//                deletedForage?.let { forage ->
+//                    viewModelScope.launch {
+//                        repo.insert(forage)
+//                    }
+//                }
 //            }
 //        }
 //    }

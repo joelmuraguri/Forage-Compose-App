@@ -51,6 +51,8 @@ fun InputScreen(
         Column(
             modifier = Modifier
                 .padding(12.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextField(
                 value = viewModel.name,
@@ -107,27 +109,16 @@ fun InputScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-
-            ) {
                 Button(
                     onClick = {
                         viewModel.onEvent(InputScreenEvents.OnSaveForage)
                         navigator.navigate(ListScreenDestination)
                     },
-                    modifier = Modifier.weight(1f)
                 ) {
-                    Text(text = "Save")
+                    Text(text = "SAVE")
                 }
-                Spacer(modifier = Modifier.width(20.dp))
 
-                Button(onClick = {  },  modifier = Modifier.weight(1f)) {
-                    Text(text = "Delete")
-                }
-            }
+
         }
     }
 }

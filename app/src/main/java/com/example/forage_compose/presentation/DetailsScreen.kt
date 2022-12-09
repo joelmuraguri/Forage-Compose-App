@@ -13,9 +13,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
 import com.example.forage_compose.domain.Forage
 import com.example.forage_compose.presentation.destinations.InputScreenDestination
+import com.example.forage_compose.viewmodels.DetailsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -32,7 +34,7 @@ fun DetailsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navigator.navigate(InputScreenDestination())
+               navigator.navigate(InputScreenDestination())
             }) {
                 Icon(painter = painterResource(id = R.drawable.ic_baseline_edit_24), contentDescription = "edit_icon")
             }
@@ -88,7 +90,9 @@ fun DetailsTopBar(navigator: DestinationsNavigator, forage: Forage){
                         Text(text = "Set Reminder")
                     }
 
-                    DropdownMenuItem(onClick = { Toast.makeText(context, "${forage.name} Item deleted", Toast.LENGTH_SHORT).show() }) {
+                    DropdownMenuItem(onClick = {
+                        Toast.makeText(context, "${forage.name} Deleted", Toast.LENGTH_SHORT).show()
+                    }) {
 
                         Text(text = "Delete Item")
                     }

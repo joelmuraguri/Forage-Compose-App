@@ -97,24 +97,6 @@ class InputViewModel @Inject constructor(
 
                 }
             }
-            is InputScreenEvents.OnDeleteForage -> {
-                viewModelScope.launch {
-                    deletedForage = events.forage
-                    repo.deleteForage(events.forage)
-                    sendUiEvent(UiEvent.ShowSnackBar(
-                        message = "${forage?.name } Deleted",
-                        action = "Undo"
-                    ))
-                }
-            }
-
-            is InputScreenEvents.OnUndoDeleteClick -> {
-                deletedForage?.let { forage ->
-                    viewModelScope.launch {
-                        repo.insert(forage)
-                    }
-                }
-            }
         }
     }
 

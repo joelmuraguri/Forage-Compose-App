@@ -4,6 +4,8 @@ import com.example.forage_compose.domain.Forage
 
 sealed class DetailsScreenEvents{
 
-    data class OnForageEdit(val forage: Forage): DetailsScreenEvents()
+    object OnUndoDeleteClick : DetailsScreenEvents()
+    data class OnDeleteForage(val forage: Forage) : DetailsScreenEvents()
+
 
 }
