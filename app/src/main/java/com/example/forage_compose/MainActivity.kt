@@ -7,8 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import com.example.forage_compose.navigation.MainNavGraph
+import com.example.forage_compose.presentation.NavGraphs
 import com.example.forage_compose.ui.theme.ForageComposeTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainNavGraph()
+                    DestinationsNavHost(navGraph = NavGraphs.root)
                 }
             }
         }

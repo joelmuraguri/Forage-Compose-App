@@ -1,10 +1,13 @@
 package com.example.forage_compose.domain
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.forage_compose.utils.Constants.FORAGE_TABLE
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = FORAGE_TABLE)
 data class Forage(
     @PrimaryKey(autoGenerate = true)
@@ -17,5 +20,4 @@ data class Forage(
     val notes : String,
     @ColumnInfo(name = "isSeason")
     val isSeason : Boolean,
-
-)
+) : Parcelable

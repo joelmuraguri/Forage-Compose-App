@@ -2,38 +2,41 @@ package com.example.forage_compose.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.example.forage_compose.R
+import com.example.forage_compose.presentation.destinations.ListScreenDestination
 import com.example.forage_compose.utils.InputScreenEvents
 import com.example.forage_compose.utils.UiEvent
 import com.example.forage_compose.viewmodels.InputViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
+@Destination
 @Composable
 fun InputScreen(
-    onNavigate: (UiEvent.Navigate)  -> Unit,
+    navigator: DestinationsNavigator,
     viewModel: InputViewModel = hiltViewModel(),
-    navController: NavHostController
 ){
+
 
     val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = true){
         viewModel.uiEvent.collect{ event ->
             when(event){
-                is UiEvent.Navigate -> onNavigate(event)
                 is UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message,
                         actionLabel = event.action
                     )
                 }
-                else -> Unit
+
             }
         }
     }
@@ -41,7 +44,7 @@ fun InputScreen(
 
     Scaffold(
         topBar = {
-            InputTopBar(navController)
+            InputTopBar(navigator)
         },
         )
     {
@@ -113,6 +116,7 @@ fun InputScreen(
                 Button(
                     onClick = {
                         viewModel.onEvent(InputScreenEvents.OnSaveForage)
+                        navigator.navigate(ListScreenDestination)
                     },
                     modifier = Modifier.weight(1f)
                 ) {
@@ -130,24 +134,17 @@ fun InputScreen(
 
 
 @Composable
-fun InputTopBar(navController: NavHostController){
+fun InputTopBar(navigator: DestinationsNavigator){
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = {
-                navController.popBackStack()
+                navigator.popBackStack()
             }) {
                 Icon(painter = painterResource(id = R.drawable.ic_baseline_arrow_back_24), contentDescription = "arrow_back_icon")
             }
-
         },
         title = {
-            Text(text = "Input Screen")
-
-        },
-        actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(painter = painterResource(id = R.drawable.ic_baseline_more_vert_24), contentDescription = "more_vert_icon")
-            }
+                Text(text = "Input Screen")
         },
     )
 }

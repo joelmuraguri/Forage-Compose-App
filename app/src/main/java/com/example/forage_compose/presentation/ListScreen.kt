@@ -1,39 +1,36 @@
 package com.example.forage_compose.presentation
 
-import androidx.compose.foundation.clickable
+import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
-import com.example.forage_compose.utils.ListScreenEvents
-import com.example.forage_compose.utils.UiEvent
+import com.example.forage_compose.presentation.destinations.InputScreenDestination
 import com.example.forage_compose.viewmodels.MainViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination(start = true)
 @Composable
 fun ListScreen(
-    onNavigate: (UiEvent.Navigate) -> Unit,
-    viewModel: MainViewModel = hiltViewModel()
+    navigator: DestinationsNavigator,
+    viewModel: MainViewModel = hiltViewModel(),
 ){
 
     val forages = viewModel.forages.collectAsState(initial = emptyList())
-    LaunchedEffect(key1 = true){
-        viewModel.uiEvent.collect{ event ->
-            when(event){
-                is UiEvent.Navigate -> onNavigate(event)
-                else -> Unit
-            }
-
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -41,7 +38,7 @@ fun ListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.onEvents(ListScreenEvents.OnAddForage)
+                navigator.navigate(InputScreenDestination())
             }) {
                 Icon(painter = painterResource(id = R.drawable.ic_baseline_add_24), contentDescription = "add_icon")
             }
@@ -52,16 +49,10 @@ fun ListScreen(
                 .fillMaxSize()
                 .padding(6.dp)
         ){
-            items(forages.value){ forage ->
+            items(forages.value){
                 ForageItem(
-                    forage = forage,
-                    modifier = Modifier
-                        .clickable {
-                            viewModel.onEvents(ListScreenEvents.OnForageClick(forage))
-                        }
-                        .padding(16.dp),
-
-
+                    forage = it,
+                    navigator = navigator
                 )
             }
         }
@@ -70,6 +61,11 @@ fun ListScreen(
 
 @Composable
 fun ListTopBar(){
+
+    var showMenu by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+
     TopAppBar(
 
         title = {
@@ -77,8 +73,32 @@ fun ListTopBar(){
 
         },
         actions = {
-            IconButton(onClick = {  }) {
-                Icon(painter = painterResource(id = R.drawable.ic_baseline_more_vert_24), contentDescription = "more_vert_icon")
+            Box(
+                modifier = Modifier
+                    .wrapContentSize(Alignment.TopEnd)
+
+            ) {
+                IconButton(onClick = { showMenu = !showMenu }) {
+                    Icon(Icons.Default.MoreVert, "")
+                }
+
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false },
+                    modifier = Modifier
+                        .padding(12.dp)
+                ) {
+
+                    DropdownMenuItem(onClick = { Toast.makeText(context, "List Sorted", Toast.LENGTH_SHORT).show() }) {
+                        Text(text = "Sort List")
+                    }
+
+                    DropdownMenuItem(onClick = { Toast.makeText(context, "All Forages Deleted", Toast.LENGTH_SHORT).show() }) {
+
+                        Text(text = "Clear List")
+                    }
+
+                }
             }
         },
     )

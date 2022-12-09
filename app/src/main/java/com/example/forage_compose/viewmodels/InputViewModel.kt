@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.forage_compose.domain.Forage
 import com.example.forage_compose.domain.repo.ForageRepo
+import com.example.forage_compose.presentation.destinations.ListScreenDestination
 import com.example.forage_compose.utils.Constants
 import com.example.forage_compose.utils.InputScreenEvents
 import com.example.forage_compose.utils.UiEvent
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -20,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InputViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val repo: ForageRepo
+    private val repo: ForageRepo,
 ): ViewModel() {
 
 
@@ -44,21 +46,22 @@ class InputViewModel @Inject constructor(
 
     private var deletedForage : Forage?= null
 
-    init {
-        val forageId = savedStateHandle.get<Int>("forageId")!!
-        if (forageId != -1){
-            viewModelScope.launch {
-                repo.getForageById(forageId)?.let { forage ->
-                    name = forage.name
-                    location = forage.location
-                    season = forage.isSeason
-                    notes = forage.notes
-                    this@InputViewModel.forage = forage
-                }
-            }
-        }
-    }
+//    init{
+//        val forageId = savedStateHandle.get<Int>("forageId")!!
+//        if (forageId != -1){
+//            viewModelScope.launch {
+//                repo.getForageById(forageId)?.let { forage ->
+//                    name = forage.name
+//                    location = forage.location
+//                    season = forage.isSeason
+//                    notes = forage.notes
+//                    this@InputViewModel.forage = forage
+//                }
+//            }
+//        }
+//    }
 
+    private val navigator : DestinationsNavigator? = null
 
     fun onEvent(events: InputScreenEvents){
         when(events){
@@ -76,9 +79,9 @@ class InputViewModel @Inject constructor(
             }
             is InputScreenEvents.OnSaveForage -> {
                 viewModelScope.launch {
-                    if (name.isBlank() && location.isBlank()){
+                    if (name.isBlank() && location.isBlank() && notes.isBlank()){
                         sendUiEvent(UiEvent.ShowSnackBar(
-                            message = "name and location can't be empty"
+                            message = "name, notes and location can't be empty"
                         ))
                         return@launch
                     }
@@ -87,11 +90,11 @@ class InputViewModel @Inject constructor(
                             id = forage?.id,
                             name = name,
                             location = location,
-                            isSeason = forage?.isSeason ?: false,
-                            notes = forage?.notes ?: ""
+                            isSeason = season,
+                            notes = notes
                         )
                     )
-                    sendUiEvent(UiEvent.Navigate(Constants.LIST_SCREEN))
+
                 }
             }
             is InputScreenEvents.OnDeleteForage -> {

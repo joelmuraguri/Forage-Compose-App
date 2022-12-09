@@ -2,21 +2,23 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-//    id 'com.google.devtools.ksp' version '1.6.10-1.0.2'
+    id 'com.google.devtools.ksp' version '1.6.10-1.0.2'
     id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
+
 
 }
 
-//kotlin {
-//    sourceSets {
-//        debug {
-//            kotlin.srcDir("build/generated/ksp/debug/kotlin")
-//        }
-//        release {
-//            kotlin.srcDir("build/generated/ksp/release/kotlin")
-//        }
-//    }
-//}
+kotlin {
+    sourceSets {
+        debug {
+            kotlin.srcDir("build/generated/ksp/debug/kotlin")
+        }
+        release {
+            kotlin.srcDir("build/generated/ksp/release/kotlin")
+        }
+    }
+}
 
 android {
     namespace 'com.example.forage_compose'
@@ -87,9 +89,9 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
-//    //Compose Destinations
-//    ksp 'io.github.raamcosta.compose-destinations:ksp:1.5.1-beta'
-//    implementation 'io.github.raamcosta.compose-destinations:core:1.5.1-beta'
+    //Compose Destinations
+    ksp 'io.github.raamcosta.compose-destinations:ksp:1.5.1-beta'
+    implementation 'io.github.raamcosta.compose-destinations:core:1.5.1-beta'
 
 
     //Dagger-Hilt
@@ -101,6 +103,14 @@ dependencies {
     //Navigation
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    //Notifications and WorkManager
+    def core_version = "1.6.0"
+    def work_version = "2.7.1"
+    implementation "androidx.core:core:$core_version"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation 'androidx.hilt:hilt-work:1.0.0'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
 
 }

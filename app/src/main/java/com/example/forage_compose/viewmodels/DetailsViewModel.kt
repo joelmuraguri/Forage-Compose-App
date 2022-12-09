@@ -11,11 +11,14 @@ import com.example.forage_compose.domain.repo.ForageRepo
 import com.example.forage_compose.utils.Constants
 import com.example.forage_compose.utils.DetailsScreenEvents
 import com.example.forage_compose.utils.UiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailsViewModel(
+@HiltViewModel
+class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repo: ForageRepo
 ) : ViewModel() {
@@ -35,8 +38,8 @@ class DetailsViewModel(
     var notes by mutableStateOf("")
         private set
 
-    private val _uiEvents = Channel<UiEvent>()
-    val uiEvent = _uiEvents.receiveAsFlow()
+//    private val _uiEvents = Channel<UiEvent>()
+//    val uiEvent = _uiEvents.receiveAsFlow()
 
 
     init {
@@ -54,20 +57,20 @@ class DetailsViewModel(
         }
     }
 
-    fun onEvents(events: DetailsScreenEvents){
-        when(events){
-            is DetailsScreenEvents.OnForageEdit -> {
-                sendUiEvents(UiEvent.Navigate(Constants.INPUT_SCREEN  + "?forageId=${events.forage.id}"))
-            }
-        }
-    }
-
-    private fun sendUiEvents(event: UiEvent){
-        viewModelScope.launch {
-            _uiEvents.send(event)
-
-        }
-    }
+//    fun onEvents(events: DetailsScreenEvents){
+//        when(events){
+//            is DetailsScreenEvents.OnForageEdit -> {
+//                sendUiEvents(UiEvent.Navigate(Constants.INPUT_SCREEN  + "?forageId=${events.forage.id}"))
+//            }
+//        }
+//    }
+//
+//    private fun sendUiEvents(event: UiEvent){
+//        viewModelScope.launch {
+//            _uiEvents.send(event)
+//
+//        }
+//    }
 
 
 
