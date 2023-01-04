@@ -9,7 +9,7 @@ interface ForageRepo {
 
     suspend fun getForageById(id:Int) : Forage?
 
-    suspend fun update(isSeason : Boolean, id:Int)
+    suspend fun update(forage: Forage)
 
     suspend fun insert(forage: Forage)
 

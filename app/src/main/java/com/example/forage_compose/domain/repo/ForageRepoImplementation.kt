@@ -19,8 +19,8 @@ class ForageRepoImplementation(
         return dao.getForageById(id)
     }
 
-    override suspend fun update(isSeason: Boolean, id: Int) {
-        return dao.update(id, isSeason)
+    override suspend fun update(forage: Forage) {
+        return dao.update(forage)
     }
 
 
