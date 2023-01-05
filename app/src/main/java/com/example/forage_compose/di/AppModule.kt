@@ -3,9 +3,12 @@ package com.example.forage_compose.di
 import android.app.Application
 import androidx.room.Room
 import com.example.forage_compose.domain.ForageDatabase
+import com.example.forage_compose.domain.auth.AuthRepo
+import com.example.forage_compose.domain.auth.AuthRepoImplementation
 import com.example.forage_compose.domain.repo.ForageRepo
 import com.example.forage_compose.domain.repo.ForageRepoImplementation
 import com.example.forage_compose.utils.Constants.FORAGE_DATABASE
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,4 +36,10 @@ object AppModule {
     fun provideRepository(database: ForageDatabase) : ForageRepo{
         return ForageRepoImplementation(database.dao)
     }
+
+    @Provides
+    fun provideFirebaseAuth() : FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    fun provideAuthRepo(repo: AuthRepoImplementation) : AuthRepo = repo
 }

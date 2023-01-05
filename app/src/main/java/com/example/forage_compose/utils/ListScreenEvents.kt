@@ -7,4 +7,5 @@ sealed class ListScreenEvents {
     data class OnForageClick(val forage: Forage) : ListScreenEvents()
     object OnAddForage : ListScreenEvents()
 
+
 }

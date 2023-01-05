@@ -1,5 +1,6 @@
 package com.example.forage_compose.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -10,18 +11,23 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.forage_compose.domain.auth.Resource
 import com.example.forage_compose.presentation.destinations.ListScreenDestination
 import com.example.forage_compose.presentation.destinations.LogInScreenDestination
-import com.example.forage_compose.ui.theme.ForageComposeTheme
+import com.example.forage_compose.viewmodels.AuthViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.popUpTo
 
 @Destination
 @Composable
 fun SignUpScreen(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel : AuthViewModel = hiltViewModel()
 ){
 
     Surface(
@@ -35,17 +41,17 @@ fun SignUpScreen(
             ) {
 
             AppLogo()
-            SignUpInputFields()
-            SignUpInputButtons(navigator)
+            SignUpInputFields(viewModel, navigator)
 
         }
-
     }
-
 }
 
 @Composable
-fun SignUpInputFields(){
+fun SignUpInputFields(
+    viewModel: AuthViewModel,
+    navigator: DestinationsNavigator
+){
 
     var email by remember {
         mutableStateOf("")
@@ -58,6 +64,8 @@ fun SignUpInputFields(){
     var name by remember {
         mutableStateOf("")
     }
+
+    val authResource = viewModel.signupFlow.collectAsState()
 
 
     Column(
@@ -116,51 +124,72 @@ fun SignUpInputFields(){
             shape = RoundedCornerShape(20.dp)
         )
 
-    }
-
-}
-
-
-@Composable
-fun SignUpInputButtons(
-    navigator: DestinationsNavigator
-){
-
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(32.dp)
-    ) {
-        Button(
-            onClick = {
-                      navigator.navigate(ListScreenDestination)
-            },
-            shape = RoundedCornerShape(20.dp),
+        Box(
             modifier = Modifier
-                .fillMaxWidth(2f)
-        ) {
-            Text(text = "SignUp")
-        }
-
-        TextButton(
-            onClick = {
-                      navigator.navigate(LogInScreenDestination)
-            },
+                .padding(32.dp),
+            contentAlignment = Alignment.Center
         ) {
             Column(
-                modifier = Modifier.padding(6.dp),
+                modifier = Modifier.padding(2.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Already have an account?")
-                Text(text = "Click here to login")
+                Button(
+                    onClick = {
+                        viewModel.signup(name, email, password)
+                    },
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth(2f)
+                ) {
+                    Text(text = "SignUp")
+                }
+
+                TextButton(
+                    onClick = {
+                        navigator.navigate(LogInScreenDestination)
+                    },
+                ) {
+                    Column(
+                        modifier = Modifier.padding(6.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "Already have an account?")
+                        Text(text = "Click here to login")
+                    }
+                }
+
             }
+
         }
 
-
+        authResource.value?.let {
+            when(it){
+                is Resource.Failure -> {
+                    val context = LocalContext.current
+                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                }
+                Resource.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .scale(0.5f)
+                    )
+                }
+                is Resource.Success -> {
+                    LaunchedEffect(Unit){
+                        navigator.navigate(ListScreenDestination){
+                            popUpTo(ListScreenDestination){
+                                inclusive = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+
 
 //@Preview(showBackground = true)
 //@Composable
