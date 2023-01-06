@@ -18,23 +18,42 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
+import com.example.forage_compose.domain.Forage
 import com.example.forage_compose.presentation.destinations.InputScreenDestination
+import com.example.forage_compose.presentation.destinations.ProfileScreenDestination
+import com.example.forage_compose.utils.UiEvent
+import com.example.forage_compose.viewmodels.DetailsViewModel
 import com.example.forage_compose.viewmodels.MainViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination(start = true)
+@Destination
 @Composable
 fun ListScreen(
     navigator: DestinationsNavigator,
     viewModel: MainViewModel = hiltViewModel(),
+    detailsViewModel: DetailsViewModel = hiltViewModel()
 ){
 
     val forages = viewModel.forages.collectAsState(initial = emptyList())
+    val forage : Forage ?= null
+    val scaffoldState = rememberScaffoldState()
+    LaunchedEffect(key1 = true){
+        detailsViewModel.uiEvent.collect{ event ->
+            when(event){
+                is UiEvent.ShowSnackBar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message,
+                        actionLabel = event.action
+                    )
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
-            ListTopBar()
+            ListTopBar(navigator)
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -60,7 +79,9 @@ fun ListScreen(
 }
 
 @Composable
-fun ListTopBar(){
+fun ListTopBar(
+    navigator: DestinationsNavigator
+){
 
     var showMenu by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -88,6 +109,13 @@ fun ListTopBar(){
                     modifier = Modifier
                         .padding(12.dp)
                 ) {
+
+                    DropdownMenuItem(onClick = {
+                        navigator.navigate(ProfileScreenDestination)
+                    }) {
+
+                        Text(text = "Profile Screen")
+                    }
 
                     DropdownMenuItem(onClick = { Toast.makeText(context, "List Sorted", Toast.LENGTH_SHORT).show() }) {
                         Text(text = "Sort List")

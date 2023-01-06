@@ -1,5 +1,6 @@
 package com.example.forage_compose.presentation
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import com.example.forage_compose.viewmodels.AuthViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
+import java.util.logging.LogManager
 
 @Destination
 @Composable
@@ -167,6 +169,7 @@ fun SignUpInputFields(
         authResource.value?.let {
             when(it){
                 is Resource.Failure -> {
+                    Log.d("SIGN UP", "${it.exception.message}")
                     val context = LocalContext.current
                     Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
                 }
