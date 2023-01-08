@@ -1,4 +1,4 @@
-package com.example.forage_compose.presentation
+package com.example.forage_compose.presentation.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

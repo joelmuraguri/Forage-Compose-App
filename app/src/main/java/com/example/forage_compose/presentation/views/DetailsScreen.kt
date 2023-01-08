@@ -1,6 +1,6 @@
-package com.example.forage_compose.presentation
+package com.example.forage_compose.presentation.views
 
-import android.widget.Toast
+import android.app.TimePickerDialog
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -17,9 +18,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
 import com.example.forage_compose.domain.Forage
 import com.example.forage_compose.presentation.destinations.InputScreenDestination
+import com.example.forage_compose.presentation.destinations.ListScreenDestination
+import com.example.forage_compose.utils.DetailsScreenEvents
 import com.example.forage_compose.viewmodels.DetailsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import java.util.*
 
 @Destination
 @Composable
@@ -41,7 +45,7 @@ fun DetailsScreen(
 
         },
         content = {
-            DetailsContent(forage = forage)
+            DetailsContent(forage = forage )
         }
 
     )
@@ -49,12 +53,25 @@ fun DetailsScreen(
 }
 
 @Composable
-fun DetailsTopBar(navigator: DestinationsNavigator, forage: Forage){
+fun DetailsTopBar(navigator: DestinationsNavigator, forage: Forage, detailsViewModel: DetailsViewModel = hiltViewModel()){
+
+
+    val calendar = Calendar.getInstance()
+    val hour = calendar[Calendar.HOUR_OF_DAY]
+    val minute = calendar[Calendar.MINUTE]
+
+    val state = detailsViewModel.state
 
 
     var showMenu by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+    val timePicker = TimePickerDialog(
+        context,
+        {_, mHour : Int, mMinute: Int ->
+            state.isTimeChanged = "$mHour:$mMinute"
+        }, hour, minute, false
+    )
 
     TopAppBar(
         navigationIcon = {
@@ -69,7 +86,6 @@ fun DetailsTopBar(navigator: DestinationsNavigator, forage: Forage){
                 Text(text = forage.name)
         },
         actions = {
-
             Box(
                 modifier = Modifier
                     .wrapContentSize(Alignment.TopEnd)
@@ -86,12 +102,16 @@ fun DetailsTopBar(navigator: DestinationsNavigator, forage: Forage){
                         .padding(12.dp)
                 ) {
 
-                    DropdownMenuItem(onClick = { Toast.makeText(context, "Reminder set", Toast.LENGTH_SHORT).show() }) {
+                    DropdownMenuItem(onClick = {
+                        timePicker.show()
+                    }) {
                         Text(text = "Set Reminder")
                     }
 
                     DropdownMenuItem(onClick = {
-                        Toast.makeText(context, "${forage.name} Deleted", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "${forage.name} Deleted", Toast.LENGTH_SHORT).show()
+                        detailsViewModel.onEvents(DetailsScreenEvents.OnDeleteForage(forage))
+                        navigator.navigate(ListScreenDestination())
                     }) {
 
                         Text(text = "Delete Item")
@@ -104,7 +124,12 @@ fun DetailsTopBar(navigator: DestinationsNavigator, forage: Forage){
 }
 
 @Composable
-fun DetailsContent(forage: Forage){
+fun DetailsContent(
+    forage: Forage,
+    viewModel: DetailsViewModel = hiltViewModel()
+){
+
+
     Column(
         modifier = Modifier
             .padding(12.dp)
@@ -163,7 +188,6 @@ fun DetailsContent(forage: Forage){
         }
 
         Column(
-
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
@@ -182,6 +206,32 @@ fun DetailsContent(forage: Forage){
             }
             Divider(modifier = Modifier.fillMaxWidth())
         }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_time_24),
+                    contentDescription = "notes"
+                )
+                Spacer(modifier = Modifier.padding(8.dp) )
+                Text(
+                    text = viewModel.state.isTimeChanged,
+                    color = Color.Red,
+                )
+            }
+            Divider(modifier = Modifier.fillMaxWidth())
+        }
     }
 }
 
+
+private fun createWorkRequest(){
+
+}

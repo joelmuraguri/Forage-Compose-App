@@ -1,11 +1,6 @@
 package com.example.forage_compose.domain
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,8 +12,8 @@ interface ForageDao {
     @Query("SELECT * FROM FORAGE_TABLE WHERE id =:id ")
     suspend fun getForageById(id :Int) : Forage?
 
-    @Query("UPDATE Forage_Table SET isSeason =:isSeason WHERE id =:id  ")
-    suspend fun update(id: Int, isSeason : Boolean)
+    @Update
+    suspend fun update(forage: Forage)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(forage: Forage)
@@ -28,6 +23,5 @@ interface ForageDao {
 
     @Query("DELETE FROM Forage_Table")
     suspend fun deleteAll()
-
 
 }

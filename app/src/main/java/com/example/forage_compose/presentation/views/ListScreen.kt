@@ -1,4 +1,4 @@
-package com.example.forage_compose.presentation
+package com.example.forage_compose.presentation.views
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
 import com.example.forage_compose.domain.Forage
+import com.example.forage_compose.presentation.components.ForageItem
 import com.example.forage_compose.presentation.destinations.InputScreenDestination
 import com.example.forage_compose.presentation.destinations.ProfileScreenDestination
 import com.example.forage_compose.utils.UiEvent

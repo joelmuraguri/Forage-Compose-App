@@ -6,6 +6,7 @@ sealed class DetailsScreenEvents{
 
     object OnUndoDeleteClick : DetailsScreenEvents()
     data class OnDeleteForage(val forage: Forage) : DetailsScreenEvents()
+    data class IsTimeChanged(val time: String) : DetailsScreenEvents()
 
 
 }

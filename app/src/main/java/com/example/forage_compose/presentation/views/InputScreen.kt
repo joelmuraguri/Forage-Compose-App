@@ -1,4 +1,4 @@
-package com.example.forage_compose.presentation
+package com.example.forage_compose.presentation.views
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -44,7 +44,7 @@ fun InputScreen(
 
     Scaffold(
         topBar = {
-            InputTopBar(navigator)
+            InputTopBar(navigator, )
         },
         )
     {
@@ -125,7 +125,7 @@ fun InputScreen(
 
 
 @Composable
-fun InputTopBar(navigator: DestinationsNavigator){
+fun InputTopBar(navigator: DestinationsNavigator, ){
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = {
@@ -135,7 +135,12 @@ fun InputTopBar(navigator: DestinationsNavigator){
             }
         },
         title = {
+//            if(forage.id!! >= 1){
+//                Text(text = "${forage.name}")
+//            }
+//            else{
                 Text(text = "Input Screen")
+
         },
     )
 }

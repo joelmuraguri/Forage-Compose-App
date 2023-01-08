@@ -46,22 +46,22 @@ class InputViewModel @Inject constructor(
 
     private var deletedForage : Forage?= null
 
-//    init{
-//        val forageId = savedStateHandle.get<Int>("forageId")!!
-//        if (forageId != -1){
-//            viewModelScope.launch {
-//                repo.getForageById(forageId)?.let { forage ->
-//                    name = forage.name
-//                    location = forage.location
-//                    season = forage.isSeason
-//                    notes = forage.notes
-//                    this@InputViewModel.forage = forage
-//                }
-//            }
-//        }
-//    }
-
-    private val navigator : DestinationsNavigator? = null
+    init{
+        val forageId = savedStateHandle.get<Int>("forageId")
+        if (forageId != -1){
+            viewModelScope.launch {
+                if (forageId != null) {
+                    repo.getForageById(forageId)?.let { forage ->
+                        name = forage.name
+                        location = forage.location
+                        season = forage.isSeason
+                        notes = forage.notes
+                        this@InputViewModel.forage = forage
+                    }
+                }
+            }
+        }
+    }
 
     fun onEvent(events: InputScreenEvents){
         when(events){
@@ -94,7 +94,6 @@ class InputViewModel @Inject constructor(
                             notes = notes
                         )
                     )
-
                 }
             }
         }
