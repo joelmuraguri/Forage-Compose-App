@@ -8,11 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.forage_compose.domain.Forage
 import com.example.forage_compose.domain.repo.ForageRepo
-import com.example.forage_compose.presentation.destinations.ListScreenDestination
-import com.example.forage_compose.utils.Constants
 import com.example.forage_compose.utils.InputScreenEvents
 import com.example.forage_compose.utils.UiEvent
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -80,7 +77,8 @@ class InputViewModel @Inject constructor(
             is InputScreenEvents.OnSaveForage -> {
                 viewModelScope.launch {
                     if (name.isBlank() && location.isBlank() && notes.isBlank()){
-                        sendUiEvent(UiEvent.ShowSnackBar(
+                        sendUiEvent(
+                            UiEvent.ShowSnackBar(
                             message = "name, notes and location can't be empty"
                         ))
                         return@launch

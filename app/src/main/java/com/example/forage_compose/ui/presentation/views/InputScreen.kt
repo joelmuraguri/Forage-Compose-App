@@ -1,4 +1,4 @@
-package com.example.forage_compose.presentation.views
+package com.example.forage_compose.ui.presentation.views
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
-import com.example.forage_compose.presentation.destinations.ListScreenDestination
+import com.example.forage_compose.ui.presentation.views.destinations.ListScreenDestination
 import com.example.forage_compose.utils.InputScreenEvents
 import com.example.forage_compose.utils.UiEvent
 import com.example.forage_compose.viewmodels.InputViewModel

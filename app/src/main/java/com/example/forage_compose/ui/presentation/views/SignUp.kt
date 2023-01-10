@@ -1,4 +1,4 @@
-package com.example.forage_compose.presentation.views
+package com.example.forage_compose.ui.presentation.views
 
 import android.util.Log
 import android.widget.Toast
@@ -17,9 +17,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.domain.auth.Resource
-import com.example.forage_compose.presentation.components.AppLogo
-import com.example.forage_compose.presentation.destinations.ListScreenDestination
-import com.example.forage_compose.presentation.destinations.LogInScreenDestination
+import com.example.forage_compose.ui.presentation.components.AppLogo
+import com.example.forage_compose.ui.presentation.views.destinations.ListScreenDestination
+import com.example.forage_compose.ui.presentation.views.destinations.LogInScreenDestination
 import com.example.forage_compose.viewmodels.AuthViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

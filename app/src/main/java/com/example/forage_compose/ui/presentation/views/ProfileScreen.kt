@@ -1,4 +1,4 @@
-package com.example.forage_compose.presentation.views
+package com.example.forage_compose.ui.presentation.views
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,9 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
-import com.example.forage_compose.presentation.components.Avatar
-import com.example.forage_compose.presentation.destinations.ListScreenDestination
-import com.example.forage_compose.presentation.destinations.LogInScreenDestination
+import com.example.forage_compose.ui.presentation.components.Avatar
+import com.example.forage_compose.ui.presentation.views.destinations.ListScreenDestination
+import com.example.forage_compose.ui.presentation.views.destinations.LogInScreenDestination
 import com.example.forage_compose.viewmodels.AuthViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
