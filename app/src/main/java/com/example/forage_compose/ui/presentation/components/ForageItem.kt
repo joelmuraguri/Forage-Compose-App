@@ -1,4 +1,4 @@
-package com.example.forage_compose.presentation.components
+package com.example.forage_compose.ui.presentation.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.forage_compose.domain.Forage
-import com.example.forage_compose.presentation.destinations.DetailsScreenDestination
+import com.example.forage_compose.ui.presentation.views.destinations.DetailsScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterialApi::class)

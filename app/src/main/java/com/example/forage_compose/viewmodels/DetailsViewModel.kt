@@ -37,6 +37,7 @@ class DetailsViewModel @Inject constructor(
     var notes by mutableStateOf("")
         private set
 
+
     var state by mutableStateOf(TimeState())
 
 
@@ -88,6 +89,14 @@ class DetailsViewModel @Inject constructor(
                 state = state.copy(isTimeChanged = events.time)
             }
         }
+    }
+
+
+    fun saveNewAlarm(time : Long, s: String, requestCode : Int){
+        viewModelScope.launch {
+
+        }
+
     }
 
     private fun sendUiEvents(event: UiEvent){

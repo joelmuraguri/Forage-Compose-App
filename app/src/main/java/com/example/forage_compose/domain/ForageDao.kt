@@ -25,3 +25,14 @@ interface ForageDao {
     suspend fun deleteAll()
 
 }
+
+@Dao
+interface AlarmDao{
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun  insert(alarm: Alarm)
+
+    @Delete
+    fun deleteAlarm(alarm: Alarm)
+
+}

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+
     <application
         android:name=".ForageApp"
         android:allowBackup="true"
@@ -27,6 +29,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <receiver
+            android:name=".utils.alarm.AlarmReceiver"
+            android:directBootAware="true"
+            android:exported="false"
+            android:process=".AlarmReceiverJoel" />
     </application>
 
 </manifest>

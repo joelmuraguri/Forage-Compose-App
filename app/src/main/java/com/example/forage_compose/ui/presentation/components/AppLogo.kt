@@ -1,4 +1,4 @@
-package com.example.forage_compose.presentation.components
+package com.example.forage_compose.ui.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

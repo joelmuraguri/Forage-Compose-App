@@ -8,6 +8,8 @@ import com.example.forage_compose.domain.auth.AuthRepoImplementation
 import com.example.forage_compose.domain.repo.ForageRepo
 import com.example.forage_compose.domain.repo.ForageRepoImplementation
 import com.example.forage_compose.utils.Constants.FORAGE_DATABASE
+import com.example.forage_compose.utils.alarm.AlarmRepo
+import com.example.forage_compose.utils.alarm.AlarmRepoImpl
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -35,6 +37,12 @@ object AppModule {
     @Singleton
     fun provideRepository(database: ForageDatabase) : ForageRepo{
         return ForageRepoImplementation(database.dao)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAlarmRepo(db : ForageDatabase) : AlarmRepo{
+        return AlarmRepoImpl(db.alarmDao)
     }
 
     @Provides
