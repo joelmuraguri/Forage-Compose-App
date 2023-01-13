@@ -20,4 +20,17 @@ class AlarmViewModel @Inject constructor(
             )
         }
     }
+
+    fun scheduleAlarm(){
+        viewModelScope.launch {
+
+        }
+
+    }
+
+    fun  cancelAlarm(){
+        viewModelScope.launch {
+
+        }
+    }
 }
