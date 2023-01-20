@@ -13,12 +13,10 @@ class AndroidAlarmScheduler(
 
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
-
     override fun schedule(forage: Forage) {
         val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, forage.time!!.hour)
-            set(Calendar.MINUTE, forage.time.minute)
+            forage.time = System.currentTimeMillis()
+
         }
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("WATER ME", forage.name)
@@ -35,6 +33,7 @@ class AndroidAlarmScheduler(
             )
         )
     }
+
 
     override fun cancel(forage: Forage) {
         alarmManager.cancel(

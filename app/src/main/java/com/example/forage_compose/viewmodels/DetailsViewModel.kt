@@ -14,6 +14,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalTime
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +24,7 @@ class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repo: ForageRepo
 ) : ViewModel() {
+
 
     var forage by mutableStateOf<Forage?>(null)
         private set
@@ -37,13 +41,17 @@ class DetailsViewModel @Inject constructor(
     var notes by mutableStateOf("")
         private set
 
-
-    var state by mutableStateOf(TimeState())
+    var time by mutableStateOf(0L)
+        private set
 
 
     private val _uiEvents = Channel<UiEvent>()
     val uiEvent = _uiEvents.receiveAsFlow()
 
+
+    fun getLocalTime() : LocalTime {
+        return LocalTime.ofInstant(Instant.ofEpochMilli(forage?.time!!), ZoneId.systemDefault())
+    }
 
     init {
         val forageId = savedStateHandle.get<Int>("forageId")
@@ -55,6 +63,7 @@ class DetailsViewModel @Inject constructor(
                         location = forage.location
                         season = forage.isSeason
                         notes = forage.notes
+                        time = forage.time
                         this@DetailsViewModel.forage = forage
                     }
                 }
@@ -85,29 +94,16 @@ class DetailsViewModel @Inject constructor(
                     }
                 }
             }
-            is DetailsScreenEvents.IsTimeChanged -> {
-                state = state.copy(isTimeChanged = events.time)
+            is DetailsScreenEvents.OnTimeChange -> {
+                time = events.time
             }
         }
-    }
-
-
-    fun saveNewAlarm(time : Long, s: String, requestCode : Int){
-        viewModelScope.launch {
-
-        }
-
     }
 
     private fun sendUiEvents(event: UiEvent){
         viewModelScope.launch {
             _uiEvents.send(event)
-
         }
     }
 }
 
-
-data class TimeState(
-    var isTimeChanged : String = ""
-)

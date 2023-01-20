@@ -9,7 +9,6 @@ import android.widget.Toast
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-
         Toast.makeText(context, "WATER ME! WATER ME! WATER ME !", Toast.LENGTH_LONG).show()
         var alarmUri: Uri? = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         if (alarmUri == null) {

@@ -1,6 +1,7 @@
 package com.example.forage_compose.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.example.forage_compose.domain.ForageDatabase
 import com.example.forage_compose.domain.auth.AuthRepo
@@ -10,6 +11,8 @@ import com.example.forage_compose.domain.repo.ForageRepoImplementation
 import com.example.forage_compose.utils.Constants.FORAGE_DATABASE
 import com.example.forage_compose.utils.alarm.AlarmRepo
 import com.example.forage_compose.utils.alarm.AlarmRepoImpl
+import com.example.forage_compose.utils.alarm.AlarmScheduler
+import com.example.forage_compose.utils.alarm.AndroidAlarmScheduler
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -29,8 +32,6 @@ object AppModule {
             ForageDatabase::class.java,
             FORAGE_DATABASE
         ).build()
-
-
     }
 
     @Provides
@@ -39,15 +40,12 @@ object AppModule {
         return ForageRepoImplementation(database.dao)
     }
 
-    @Provides
-    @Singleton
-    fun providesAlarmRepo(db : ForageDatabase) : AlarmRepo{
-        return AlarmRepoImpl(db.alarmDao)
-    }
 
     @Provides
     fun provideFirebaseAuth() : FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides
     fun provideAuthRepo(repo: AuthRepoImplementation) : AuthRepo = repo
+
+
 }

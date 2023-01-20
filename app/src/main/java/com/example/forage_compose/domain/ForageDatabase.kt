@@ -7,6 +7,5 @@ import androidx.room.RoomDatabase
 abstract class ForageDatabase : RoomDatabase() {
 
     abstract val dao : ForageDao
-    abstract val alarmDao : AlarmDao
 
 }

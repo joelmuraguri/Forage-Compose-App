@@ -6,7 +6,7 @@
 
     <application
         android:name=".ForageApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/app_logo"
@@ -30,10 +30,7 @@
                 android:value="" />
         </activity>
         <receiver
-            android:name=".utils.alarm.AlarmReceiver"
-            android:directBootAware="true"
-            android:exported="false"
-            android:process=".AlarmReceiverJoel" />
+            android:name=".utils.alarm.AlarmReceiver" />
     </application>
 
 </manifest>

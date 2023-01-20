@@ -14,6 +14,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalTime
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +41,9 @@ class InputViewModel @Inject constructor(
     var notes by mutableStateOf("")
         private set
 
+    var time by mutableStateOf(0L)
+        private set
+
     private val _uiEvents = Channel<UiEvent>()
     val uiEvent = _uiEvents.receiveAsFlow()
 
@@ -53,12 +59,21 @@ class InputViewModel @Inject constructor(
                         location = forage.location
                         season = forage.isSeason
                         notes = forage.notes
+                        time = forage.time!!
                         this@InputViewModel.forage = forage
                     }
                 }
             }
         }
     }
+
+    fun getLocalTime(): LocalTime {
+
+        time = forage!!.time
+        return LocalTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault())
+    }
+
+
 
     fun onEvent(events: InputScreenEvents){
         when(events){
@@ -74,6 +89,7 @@ class InputViewModel @Inject constructor(
             is InputScreenEvents.OnNotesChange -> {
                 notes = events.notes
             }
+
             is InputScreenEvents.OnSaveForage -> {
                 viewModelScope.launch {
                     if (name.isBlank() && location.isBlank() && notes.isBlank()){
@@ -89,7 +105,8 @@ class InputViewModel @Inject constructor(
                             name = name,
                             location = location,
                             isSeason = season,
-                            notes = notes
+                            notes = notes,
+                            time = time,
                         )
                     )
                 }
