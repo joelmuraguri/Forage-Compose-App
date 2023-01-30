@@ -18,12 +18,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
-import com.example.forage_compose.domain.Forage
 import com.example.forage_compose.ui.presentation.components.ForageItem
 import com.example.forage_compose.ui.presentation.views.destinations.InputScreenDestination
 import com.example.forage_compose.ui.presentation.views.destinations.ProfileScreenDestination
+import com.example.forage_compose.utils.ListScreenEvents
 import com.example.forage_compose.utils.UiEvent
-import com.example.forage_compose.viewmodels.DetailsViewModel
 import com.example.forage_compose.viewmodels.MainViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -33,14 +32,14 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun ListScreen(
     navigator: DestinationsNavigator,
     viewModel: MainViewModel = hiltViewModel(),
-    detailsViewModel: DetailsViewModel = hiltViewModel()
 ){
 
+    var showMenu by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     val forages = viewModel.forages.collectAsState(initial = emptyList())
-    val forage : Forage ?= null
     val scaffoldState = rememberScaffoldState()
     LaunchedEffect(key1 = true){
-        detailsViewModel.uiEvent.collect{ event ->
+        viewModel.uiEvent.collect{ event ->
             when(event){
                 is UiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
@@ -54,7 +53,49 @@ fun ListScreen(
 
     Scaffold(
         topBar = {
-            ListTopBar(navigator)
+            TopAppBar(
+
+                title = {
+                    Text(text = "Forage")
+
+                },
+                actions = {
+                    Box(
+                        modifier = Modifier
+                            .wrapContentSize(Alignment.TopEnd)
+
+                    ) {
+                        IconButton(onClick = { showMenu = !showMenu }) {
+                            Icon(Icons.Default.MoreVert, "")
+                        }
+
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false },
+                            modifier = Modifier
+                                .padding(12.dp)
+                        ) {
+
+                            DropdownMenuItem(onClick = {
+                                navigator.navigate(ProfileScreenDestination)
+                            }) {
+
+                                Text(text = "Profile Screen")
+                            }
+
+                            DropdownMenuItem(onClick = { Toast.makeText(context, "List Sorted", Toast.LENGTH_SHORT).show() }) {
+                                Text(text = "Sort List")
+                            }
+
+                            DropdownMenuItem(onClick = {
+                                viewModel.onEvents(ListScreenEvents.DeleteAll)
+                            }) {
+                                Text(text = "Clear List")
+                            }
+                        }
+                    }
+                },
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -79,58 +120,5 @@ fun ListScreen(
     }
 }
 
-@Composable
-fun ListTopBar(
-    navigator: DestinationsNavigator
-){
-
-    var showMenu by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-
-
-    TopAppBar(
-
-        title = {
-            Text(text = "Forage")
-
-        },
-        actions = {
-            Box(
-                modifier = Modifier
-                    .wrapContentSize(Alignment.TopEnd)
-
-            ) {
-                IconButton(onClick = { showMenu = !showMenu }) {
-                    Icon(Icons.Default.MoreVert, "")
-                }
-
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false },
-                    modifier = Modifier
-                        .padding(12.dp)
-                ) {
-
-                    DropdownMenuItem(onClick = {
-                        navigator.navigate(ProfileScreenDestination)
-                    }) {
-
-                        Text(text = "Profile Screen")
-                    }
-
-                    DropdownMenuItem(onClick = { Toast.makeText(context, "List Sorted", Toast.LENGTH_SHORT).show() }) {
-                        Text(text = "Sort List")
-                    }
-
-                    DropdownMenuItem(onClick = { Toast.makeText(context, "All Forages Deleted", Toast.LENGTH_SHORT).show() }) {
-
-                        Text(text = "Clear List")
-                    }
-
-                }
-            }
-        },
-    )
-}
 
 
