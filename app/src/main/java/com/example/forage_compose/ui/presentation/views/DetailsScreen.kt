@@ -2,6 +2,7 @@ package com.example.forage_compose.ui.presentation.views
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
-import com.example.forage_compose.domain.Forage
+import com.example.forage_compose.domain.data.Forage
 import com.example.forage_compose.ui.presentation.views.destinations.InputScreenDestination
 import com.example.forage_compose.ui.presentation.views.destinations.ListScreenDestination
 import com.example.forage_compose.utils.DetailsScreenEvents
@@ -26,9 +27,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.Instant
 import java.time.LocalTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Destination
@@ -39,12 +38,10 @@ fun DetailsScreen(
     detailsViewModel: DetailsViewModel = hiltViewModel()
 ){
     
-    val time = detailsViewModel.time
-    val instantTime = Instant.ofEpochMilli(time)
-    val zonedDateTime = instantTime.atZone(ZoneId.of("UTC"))
-    var localTime = zonedDateTime.toLocalTime()
+//    val time = detailsViewModel.time
+//    val instantTime = Instant.ofEpochMilli(time)
+//    val zonedDateTime = instantTime.atZone(ZoneId.of("UTC"))
 
-    var convertedTime = detailsViewModel.getLocalTime()
 
     var pickedTime by remember {
         mutableStateOf(LocalTime.now())
@@ -54,7 +51,7 @@ fun DetailsScreen(
         derivedStateOf {
             DateTimeFormatter
                 .ofPattern("hh:mm")
-                .format(convertedTime)
+                .format(pickedTime)
         }
     }
 
@@ -72,7 +69,6 @@ fun DetailsScreen(
                         navigator.popBackStack()
                     }) {
                         Icon(painter = painterResource(id = R.drawable.ic_baseline_arrow_back_24), contentDescription = "arrow_back_icon")
-
                     }
                 },
                 title = {
@@ -132,22 +128,82 @@ fun DetailsScreen(
                 }
             ) {
                 timepicker(
-                    initialTime = convertedTime,
+                    initialTime = pickedTime,
                     title = "Pick a time",
                     is24HourClock = true
                 ) {
-                    convertedTime = it
+                    pickedTime = it
                 }
             }
 
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-               navigator.navigate(InputScreenDestination())
-            }) {
-                Icon(painter = painterResource(id = R.drawable.ic_baseline_edit_24), contentDescription = "edit_icon")
-            }
+        bottomBar = {
+            Box(
+                contentAlignment = Alignment.BottomStart
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Button(
+                        onClick = {
+                                  navigator.navigate(InputScreenDestination)
+                        },
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier
+                            .height(60.dp)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .padding(12.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_baseline_edit_24),
+                                contentDescription = "edit",
+                                modifier = Modifier
+                                    .size(37.dp)
 
+                            )
+                            Text(
+                                text = "Edit",
+                                fontSize = 18.sp
+                            )
+                        }
+
+                    }
+                    Button(
+                        onClick = {
+                            detailsViewModel.onEvents(DetailsScreenEvents.OnDeleteForage(forage))
+                            navigator.navigate(ListScreenDestination())
+                        },
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier
+                            .height(60.dp)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .padding(12.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_baseline_delete_24),
+                                contentDescription = "delete",
+                                modifier = Modifier
+                                    .size(37.dp)
+                            )
+                            Text(
+                                text = "Delete",
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+                }
+            }
         },
         content = {
             Column(

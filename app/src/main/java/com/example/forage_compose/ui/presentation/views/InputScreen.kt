@@ -26,7 +26,6 @@ import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.Instant
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 
 @Destination
@@ -62,18 +61,18 @@ fun InputScreen(
     val zonedDateTime = instantTime.atZone(ZoneId.of("UTC"))
     var localTime = zonedDateTime.toLocalTime()
 
-//    var convertedTime = viewModel.getTime()
-
-    val pickedTime = viewModel.time
-
-
-    val formatTime by remember {
-        derivedStateOf {
-            DateTimeFormatter
-                .ofPattern("hh:mm")
-                .format(localTime)
-        }
-    }
+////    var convertedTime = viewModel.getTime()
+//
+//    val pickedTime = viewModel.time
+//
+//
+//    val formatTime by remember {
+//        derivedStateOf {
+//            DateTimeFormatter
+//                .ofPattern("hh:mm")
+//                .format(localTime)
+//        }
+//    }
 
     Scaffold(
         topBar = {
@@ -271,13 +270,6 @@ fun InputScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-                Button(
-                    onClick = {},
-                ) {
-                    Text(text = "SAVE")
-                }
         }
     }
 }

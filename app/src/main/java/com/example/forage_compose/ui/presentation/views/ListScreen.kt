@@ -1,12 +1,10 @@
 package com.example.forage_compose.ui.presentation.views
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -98,10 +96,23 @@ fun ListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
+            FloatingActionButton(
+                onClick = {
                 navigator.navigate(InputScreenDestination())
-            }) {
-                Icon(painter = painterResource(id = R.drawable.ic_baseline_add_24), contentDescription = "add_icon")
+            },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .padding(12.dp)
+                    .width(150.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    Icon(painter = painterResource(id = R.drawable.ic_baseline_add_24), contentDescription = "add_icon")
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(text = "New Forage")
+                }
             }
         },
     ){
