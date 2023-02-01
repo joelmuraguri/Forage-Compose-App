@@ -2,6 +2,7 @@ package com.example.forage_compose.ui.presentation.views
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.forage_compose.R
 import com.example.forage_compose.ui.presentation.views.destinations.ListScreenDestination
@@ -23,7 +25,6 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.Instant
-import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -143,6 +144,72 @@ fun InputScreen(
                 }
             }
         },
+        bottomBar = {
+            Box(
+                contentAlignment = Alignment.BottomStart
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Button(
+                        onClick = { /*TODO*/ },
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier
+                            .height(60.dp)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .padding(12.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_baseline_discard_24),
+                                contentDescription = "discard",
+                                modifier = Modifier
+                                    .size(37.dp)
+
+                            )
+                            Text(
+                                text = "Discard",
+                                fontSize = 18.sp
+                            )
+                        }
+
+                    }
+                    Button(
+                        onClick = {
+                            viewModel.onEvent(InputScreenEvents.OnSaveForage)
+                            navigator.navigate(ListScreenDestination)
+                        },
+                        shape = RoundedCornerShape(20.dp),
+                        modifier = Modifier
+                            .height(60.dp)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .padding(12.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_baseline_save_24),
+                                contentDescription = "save",
+                                modifier = Modifier
+                                    .size(37.dp)
+                            )
+                            Text(
+                                text = "Save",
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
         )
     {
         Column(
@@ -151,7 +218,7 @@ fun InputScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextField(
+            OutlinedTextField(
                 value = viewModel.name,
                 onValueChange = {
                    viewModel.onEvent(InputScreenEvents.OnNameChange(it))
@@ -163,7 +230,7 @@ fun InputScreen(
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            TextField(
+            OutlinedTextField(
                 value = viewModel.location,
                 onValueChange = {
                    viewModel.onEvent(InputScreenEvents.OnLocationChange(it))
@@ -193,7 +260,7 @@ fun InputScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            TextField(
+            OutlinedTextField(
                 value = viewModel.notes,
                 onValueChange = {
                     viewModel.onEvent(InputScreenEvents.OnNotesChange(it))
@@ -207,36 +274,11 @@ fun InputScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
                 Button(
-                    onClick = {
-                        viewModel.onEvent(InputScreenEvents.OnSaveForage)
-                        navigator.navigate(ListScreenDestination)
-                    },
+                    onClick = {},
                 ) {
                     Text(text = "SAVE")
                 }
         }
     }
-}
-
-
-@Composable
-fun InputTopBar(navigator: DestinationsNavigator, ){
-//    TopAppBar(
-//        navigationIcon = {
-//            IconButton(onClick = {
-//                navigator.popBackStack()
-//            }) {
-//                Icon(painter = painterResource(id = R.drawable.ic_baseline_arrow_back_24), contentDescription = "arrow_back_icon")
-//            }
-//        },
-//        title = {
-////            if(forage.id!! >= 1){
-////                Text(text = "${forage.name}")
-////            }
-////            else{
-//                Text(text = "Input Screen")
-//
-//        },
-//    )
 }
 
